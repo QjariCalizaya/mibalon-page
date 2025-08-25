@@ -1,13 +1,25 @@
-﻿import mongoose from 'mongoose';
+﻿// models/Producto.js
+import mongoose from "mongoose";
 
-const ProductSchema = new mongoose.Schema({
-  nombre: { type: String, required: true },
-  descripcion: { type: String },
-  fabricante: {type:String},
-  precio: { type: Number, required: true },
-  imagen: { type: String },
-  categoria: { type: String },
-  stock: { type: Number, default: 0 },
-}, { timestamps: true });
+const ProductoSchema = new mongoose.Schema({
+  nombre: {
+    type: String,
+    required: true,
+  },
+  precio: {
+    type: Number,
+    required: true,
+  },
+  stock: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  descripcion: {
+    type: String,
+    default: "",
+  },
+});
 
-export default mongoose.models.Product || mongoose.model('Product', ProductSchema);
+// Evita recrear el modelo en hot-reloads de Next.js
+export default mongoose.models.Producto || mongoose.model("Producto", ProductoSchema);

@@ -1,28 +1,24 @@
 ﻿// pages/api/productos.js
-
-import connectDB from '@/lib/mongodb';
-import Product from '@/models/Product';
+import connectDB from "../../lib/mongodb.js";
+import Producto from "../../models/Product.js";
 
 export default async function handler(req, res) {
   await connectDB();
 
-  if (req.method === 'POST') {
+  if (req.method === "GET") {
+    const productos = await Producto.find();
+    return res.status(200).json(productos);
+  }
+
+  if (req.method === "POST") {
     try {
-      const nuevoProducto = await Product.create(req.body);
+      const nuevoProducto = new Producto(req.body);
+      await nuevoProducto.save();
       return res.status(201).json(nuevoProducto);
-    } catch (error) {
-      return res.status(400).json({ error: 'Error al crear el producto' });
+    } catch (err) {
+      return res.status(400).json({ error: "Error al crear producto", details: err.message });
     }
   }
 
-  if (req.method === 'GET') {
-    try {
-      const productos = await Product.find();
-      return res.status(200).json(productos);
-    } catch (error) {
-      return res.status(500).json({ error: 'Error al obtener productos' });
-    }
-  }
-
-  return res.status(405).json({ error: 'Método no permitido' });
+  return res.status(405).json({ error: "Método no permitido" });
 }
